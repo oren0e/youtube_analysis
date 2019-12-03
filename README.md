@@ -1,2 +1,2 @@
 # youtube_analysis
-Analysis of a YouTube dataset in Python
+The dataset is taken from https://www.kaggle.com/datasnaek/youtube-new
