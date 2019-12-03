@@ -1,0 +1,8 @@
+data/**
+*.csv
+*.json
+results/**
+*.jpeg
+*.png
+*.gif
+*.jpg
