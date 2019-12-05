@@ -59,3 +59,19 @@ mydata['publish_time'] = pd.to_datetime(mydata['publish_time'], errors='coerce',
 mydata.insert(5,column='publish_date',value=mydata['publish_time'].dt.date)
 mydata['publish_time'] = mydata['publish_time'].dt.time
 
+## EDA ##
+# How popular each category in different countries
+fig, ax = plt.subplots(3,1, figsize=(20,15))
+sns.countplot(x='category', data=mydata[mydata['country'] == 'US'],
+              order=mydata[mydata['country'] == 'US']['category'].value_counts().index, ax=ax[0])
+sns.countplot(x='category', data=mydata[mydata['country'] == 'GB'],
+              order=mydata[mydata['country'] == 'GB']['category'].value_counts().index, ax=ax[1])
+sns.countplot(x='category', data=mydata[mydata['country'] == 'CA'],
+              order=mydata[mydata['country'] == 'CA']['category'].value_counts().index, ax=ax[2])
+ax[0].title.set_text('US')
+ax[1].title.set_text('GB')
+ax[2].title.set_text('CA')
+#plt.show()
+plt.savefig('results/graphs/categories_by_country.png')
+
+# views, likes across time
