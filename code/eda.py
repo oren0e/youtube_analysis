@@ -39,3 +39,23 @@ mydata = pd.concat([videos_us,videos_ca,videos_gb],axis=0)
 mydata.tail()
 
 # Duplicates, missing values, date-time
+# missing values
+mydata.isnull().any()
+a = mydata[mydata['description'].isnull()]
+a.head()
+a.info()
+
+# duplicates
+mydata.duplicated().sum()
+print(mydata[mydata.duplicated()].head())
+mydata[mydata['video_id'] == 'jzLlsbdrwQk'].sort_values(by=['likes'])
+# keep first occurance of duplicated rows
+mydata.drop_duplicates(keep='first', inplace=True)
+
+# fix datetime columns
+mydata['trending_date'] = pd.to_datetime(mydata['trending_date'], errors='coerce', format="%y.%d.%m")
+mydata['publish_time'] = pd.to_datetime(mydata['publish_time'], errors='coerce', format="%Y-%m-%dT%H:%M:%S.%fZ")
+
+mydata.insert(5,column='publish_date',value=mydata['publish_time'].dt.date)
+mydata['publish_time'] = mydata['publish_time'].dt.time
+
