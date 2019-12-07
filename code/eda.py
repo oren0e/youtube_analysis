@@ -74,4 +74,16 @@ ax[2].title.set_text('CA')
 #plt.show()
 plt.savefig('results/graphs/categories_by_country.png')
 
-# views, likes across time
+# views, likes, trending across time
+# check that trending date always comes after publish_date
+mydata[mydata['trending_date'].dt.date < pd.to_datetime(mydata['publish_date'], format="%Y-%m-%d").dt.date]
+
+mydata.groupby(['country','video_id']).size().sort_values(ascending=False).reset_index()
+
+# todo: I want to stack for each country for each count number of appearances the number of videos I have, and then plot this on a line
+#  graph.
+
+
+
+
+
