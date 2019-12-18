@@ -72,18 +72,45 @@ ax[0].title.set_text('US')
 ax[1].title.set_text('GB')
 ax[2].title.set_text('CA')
 #plt.show()
-plt.savefig('results/graphs/categories_by_country.png')
+#plt.savefig('results/graphs/categories_by_country.png')
 
 # views, likes, trending across time
 # check that trending date always comes after publish_date
 mydata[mydata['trending_date'].dt.date < pd.to_datetime(mydata['publish_date'], format="%Y-%m-%d").dt.date]
 
-mydata.groupby(['country','video_id']).size().sort_values(ascending=False).reset_index()
+counts_df = mydata.groupby(['country','video_id']).size().sort_values(ascending=False).reset_index()
+counts_df.columns = ['country','video_id','cnt']
+counts_df.groupby(['country','cnt']).size()
 
-# todo: I want to stack for each country for each count number of appearances the number of videos I have, and then plot this on a line
-#  graph.
+# most common words in a title
+import nltk
+nltk.download('stopwords')
+import string
+from nltk.corpus import stopwords
+import wordcloud
+
+def text_processor(text):
+    """
+    1. Remove punctuation
+    2. Remove stopwords
+    3. Return list of clean words
+    """
+    no_punc = [char for char in text if char not in string.punctuation]
+    no_punc = ''.join(no_punc)
+    return [w for w in no_punc.split() if w.lower() not in stopwords.words('english')]
+
+list_of_words = mydata[mydata['country'] == 'US']['title'].drop_duplicates().apply(text_processor)
+lst = []
+for line in list_of_words:
+    for word in line:
+        lst.append(word)
+
+us_string = ' '.join(lst)
 
 
+wc = wordcloud.WordCloud(background_color="white", colormap='plasma').generate(us_string)
+plt.imshow(wc, interpolation='bilinear')
+plt.axis("off")
+plt.show()
 
-
-
+#TODO: formalize and structure the code for all the countries (for the wordcloud)
